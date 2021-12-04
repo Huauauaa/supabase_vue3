@@ -10,6 +10,7 @@
     "@supabase/supabase-js": "^1.28.5",
     "element-plus": "^1.2.0-beta.5",
     "sass": "^1.44.0",
+    "unplugin-auto-import": "^0.5.1",
     "vue": "^3.2.16",
     "vue-router": "4"
   },
