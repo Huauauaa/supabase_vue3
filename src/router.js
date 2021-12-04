@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-
+import store from './store';
 import Layout from './Layout.vue';
 import SignIn from './views/sign-in.view.vue';
 import SignUp from './views/sign-up.view.vue';
@@ -11,7 +11,6 @@ const routes = [
   {
     path: '/',
     component: Layout,
-    redirect: 'welcome',
     children: [
       {
         path: '',
@@ -59,14 +58,11 @@ const router = createRouter({
   routes,
 });
 router.beforeEach((to, from, next) => {
-  console.log(to);
   if (to?.meta?.public) {
     next();
-  } else if (!localStorage.getItem('auth') && to.name !== 'signIn') {
-    console.log(11);
+  } else if (!store.state.user && to.name !== 'signIn') {
     next({ name: 'signIn' });
   } else {
-    console.log(22);
     next();
   }
 });
