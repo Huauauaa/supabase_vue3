@@ -20,6 +20,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 import { supabase } from '../supabaseClient';
 

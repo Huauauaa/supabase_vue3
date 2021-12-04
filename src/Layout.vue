@@ -23,6 +23,7 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue';
+import { ElMessage } from 'element-plus';
 import { useRouter, useRoute } from 'vue-router';
 import { supabase } from './supabaseClient';
 import store from './store';
