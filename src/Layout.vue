@@ -7,30 +7,43 @@
         mode="horizontal"
         @select="onMenuClick"
       >
-        <el-sub-menu index="profile">
-          <template #title>Profile</template>
+        <el-sub-menu v-if="user" index="profile">
+          <template #title>{{ user.email }}</template>
           <el-menu-item index="setting">Setting</el-menu-item>
           <el-menu-item index="signOut">Sign out</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="signIn">Sign in</el-menu-item>
-        <el-menu-item index="signUp">Sign up</el-menu-item>
+        <template v-else>
+          <el-menu-item index="signIn">Sign in</el-menu-item>
+          <el-menu-item index="signUp">Sign up</el-menu-item>
+        </template>
       </el-menu></el-header
     >
-    <el-main><router-view> </router-view></el-main>
+    <el-main v-loading="loading"><router-view> </router-view></el-main>
   </el-container>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { supabase } from './supabaseClient';
+import store from './store';
+
 const router = useRouter();
 const route = useRoute();
+const activeIndex = ref('');
+const loading = ref(false);
+const user = computed(() => store.state.user);
 
-const activeIndex = ref('2-2');
-
-const onMenuClick = (key, keyPath) => {
+const onMenuClick = async (key, keyPath) => {
   if (key === 'signOut') {
-    localStorage.removeItem('auth');
+    loading.value = true;
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      ElMessage.error(error.message);
+      loading.value = false;
+      return;
+    }
     router.push({ name: 'welcome' });
+    loading.value = false;
     return;
   }
   router.push({ name: key });
